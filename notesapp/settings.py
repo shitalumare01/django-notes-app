@@ -5,6 +5,10 @@ Django settings for notesapp project.
 import os
 from pathlib import Path
 
+# ==============================
+# BASE DIR
+# ==============================
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ==============================
@@ -13,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv(
     "SECRET_KEY",
-    "unsafe-dev-secret-key"  # override in .env or prod
+    "unsafe-dev-secret-key"
 )
 
 DEBUG = os.getenv("DEBUG", "True") == "True"
@@ -45,7 +49,7 @@ MIDDLEWARE = [
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',  # token-based API
+    # 'django.middleware.csrf.CsrfViewMiddleware',  # API based
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -74,7 +78,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'notesapp.wsgi.application'
 
 # ==============================
-# DATABASE (Docker-safe MySQL)
+# DATABASE (DOCKER SAFE)
 # ==============================
 
 DATABASES = {
@@ -83,7 +87,7 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME', 'notesdb'),
         'USER': os.getenv('DB_USER', 'notesuser'),
         'PASSWORD': os.getenv('DB_PASSWORD', 'password'),
-        'HOST': os.getenv('DB_HOST', 'db'),   # IMPORTANT
+        'HOST': os.getenv('DB_HOST', 'mysql'),   # service/container name
         'PORT': os.getenv('DB_PORT', '3306'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -92,7 +96,7 @@ DATABASES = {
 }
 
 # ==============================
-# AUTH / PASSWORDS
+# PASSWORD VALIDATION
 # ==============================
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -111,3 +115,28 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# ==============================
+# STATIC FILES (REQUIRED)
+# ==============================
+
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'mynotes/build/static'
+]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# ==============================
+# DEFAULT PRIMARY KEY
+# ==============================
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ==============================
+# CORS
+# ==============================
+
+CORS_ALLOW_ALL_ORIGINS = True
