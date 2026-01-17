@@ -1,1 +1,16 @@
-node_modules
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Django
+db.sqlite3
+staticfiles/
+
+# Docker
+*.log
+
+# OS
+.DS_Store
