@@ -1,20 +1,17 @@
-FROM python:3.9
+FROM python:3.9-slim
 
-WORKDIR /app/backend
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-COPY requirements.txt /app/backend
-RUN apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install -y gcc default-libmysqlclient-dev pkg-config \
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    default-libmysqlclient-dev gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Install app dependencies
-RUN pip install mysqlclient
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app/backend
+COPY . .
 
-EXPOSE 8000 80
-
-# Run Django development server
-CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+EXPOSE 8000
